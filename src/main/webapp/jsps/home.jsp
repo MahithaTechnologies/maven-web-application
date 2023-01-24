@@ -9,7 +9,7 @@
 </head>
 </head>
 <body>
-<h1 align="center">Welcome to Mahitha Technologies, demo for poll scm </h1>
+<h1 align="center">Welcome to Mahitha Technologies, demo for github webhook </h1>
 <h1 align="center"> Mahitha Technologies- Very Good Training center for DevOps with AWS in Maratha Halli Bangalore India and also for Job Assitance Job Support also...Teaching Real Time scnerios</h1>
 <hr>
 <br>
