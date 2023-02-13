@@ -5,6 +5,7 @@ node{
     echo " The Jenkins HD is : ${env.JENKINS_HOME}"
     properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '7', daysToKeepStr: '', numToKeepStr: '7')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
     def mavenHome = tool name :'maven3.8.7'
+try{
 stage('checkoutcode'){git branch: 'development', credentialsId: '5f6ec075-b35c-48b5-9fa9-4a20dce0191b', url: 'https://github.com/MahithaTechnologies/maven-web-application.git'
 }
 stage('Build'){
@@ -16,14 +17,23 @@ stage('uploadArtifacyintoNexus'){
 stage('DeployAppIntoTomcatServer'){
 sshagent(['192efb87-6e5f-4387-ab71-a4d1401c1ca7']) {
     sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@172.31.38.121:/opt/apache-tomcat-9.0.70/webapps"
-    
+  }  
 }
 }
 }
 }
 }
-}  //node closing
+catch(e){
+currentBuild.result="FAILURE"
+}
 
+finally{
+sendslacknotifications(currentBuild.result)
+}
+
+
+}  //node closing
+//sending slack notification function
 def sendslacknotifications(String buildStatus = 'STARTED') {
   // build status of null means successful
   buildStatus =  buildStatus ?: 'SUCCESS'
